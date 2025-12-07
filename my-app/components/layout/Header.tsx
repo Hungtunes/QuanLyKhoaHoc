@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { View } from '../../types';
 import ThemeToggle from '../ui/ThemeToggle';
@@ -7,8 +6,15 @@ interface HeaderProps {
     currentView: View;
 }
 
+const viewTitles: Record<View, string> = {
+    'dashboard': 'Bảng điều khiển',
+    'users': 'Quản lý người dùng',
+    'courses': 'Quản lý khóa học',
+    'course-details': 'Chi tiết khóa học'
+};
+
 const Header: React.FC<HeaderProps> = ({ currentView }) => {
-    const title = currentView.replace('-', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    const title = viewTitles[currentView] || 'Bảng điều khiển';
 
     return (
         <header className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">

@@ -25,12 +25,12 @@ const Courses: React.FC<CoursesProps> = ({ onViewCourse }) => {
             const response = await fetch(`${API_BASE_URL}/courses`);
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`Failed to fetch courses. Server response: ${errorText}`);
+                throw new Error(`Lấy danh sách khóa học thất bại. Phản hồi từ server: ${errorText}`);
             }
             const data: Course[] = await response.json();
             setCourses(data);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định');
         } finally {
             setLoading(false);
         }
@@ -62,26 +62,26 @@ const Courses: React.FC<CoursesProps> = ({ onViewCourse }) => {
             });
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`Failed to save course. Server response: ${errorText}`);
+                throw new Error(`Lưu khóa học thất bại. Phản hồi từ server: ${errorText}`);
             }
             await fetchCourses();
             handleCloseModal();
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định');
         }
     };
 
     const handleDeleteCourse = async (courseId: number) => {
-        if (window.confirm('Are you sure you want to delete this course?')) {
+        if (window.confirm('Bạn có chắc chắn muốn xóa khóa học này không?')) {
             try {
                 const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, { method: 'DELETE' });
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(`Failed to delete course. Server response: ${errorText}`);
+                    throw new Error(`Xóa khóa học thất bại. Phản hồi từ server: ${errorText}`);
                 }
                 await fetchCourses();
             } catch (err) {
-                setError(err instanceof Error ? err.message : 'An unknown error occurred');
+                setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định');
             }
         }
     };
@@ -92,13 +92,13 @@ const Courses: React.FC<CoursesProps> = ({ onViewCourse }) => {
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Courses</h2>
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Các khóa học</h2>
                 <button
                     onClick={() => handleOpenModal()}
                     className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition"
                 >
                     <PlusIcon />
-                    Add Course
+                    Thêm khóa học
                 </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -113,7 +113,7 @@ const Courses: React.FC<CoursesProps> = ({ onViewCourse }) => {
                 ))}
             </div>
 
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={currentCourse ? 'Edit Course' : 'Add Course'}>
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={currentCourse ? 'Chỉnh sửa khóa học' : 'Thêm khóa học'}>
                 <CourseForm course={currentCourse} onSave={handleSaveCourse} onCancel={handleCloseModal} />
             </Modal>
         </div>

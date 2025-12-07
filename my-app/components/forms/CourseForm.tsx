@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import type { Course, CourseRequest } from '../../types';
 
@@ -41,7 +40,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, onSave, onCancel }) => 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Course Name</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tên khóa học</label>
         <input
           type="text"
           name="courseName"
@@ -52,7 +51,7 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, onSave, onCancel }) => 
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Mô tả</label>
         <textarea
           name="des"
           value={formData.des}
@@ -63,8 +62,8 @@ const CourseForm: React.FC<CourseFormProps> = ({ course, onSave, onCancel }) => 
         ></textarea>
       </div>
       <div className="flex justify-end gap-4 pt-4">
-        <button type="button" onClick={onCancel} className="px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">Cancel</button>
-        <button type="submit" className="px-4 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700">Save</button>
+        <button type="button" onClick={onCancel} className="px-4 py-2 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">Hủy</button>
+        <button type="submit" className="px-4 py-2 rounded-md text-white bg-primary-600 hover:bg-primary-700">Lưu</button>
       </div>
     </form>
   );

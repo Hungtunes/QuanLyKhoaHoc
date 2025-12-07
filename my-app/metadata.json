@@ -1,5 +1,4 @@
-
 {
-  "name": "Course Management Dashboard",
-  "description": "An admin dashboard to manage users, courses, and student enrollments. Features a modern UI with light and dark modes."
+  "name": "Bảng điều khiển quản lý khóa học",
+  "description": "Bảng điều khiển dành cho quản trị viên để quản lý người dùng, khóa học và việc ghi danh của học viên. Giao diện hiện đại với chế độ sáng và tối."
 }

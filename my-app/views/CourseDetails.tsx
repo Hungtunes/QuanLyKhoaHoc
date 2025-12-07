@@ -21,8 +21,6 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
     setLoading(true);
     setError(null);
     try {
-      // NOTE: This now calls the corrected backend endpoint. 
-      // Ensure your Spring Boot backend's controller method is annotated with @GetMapping("/{courseId}").
       const response = await fetch(`${API_BASE_URL}/usercourse/${course.id}`);
 
       if (response.status === 204) { // No content
@@ -31,14 +29,17 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
       }
       
       if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error(`Lỗi 404: Không tìm thấy. Không thể tìm thấy API endpoint để lấy danh sách học viên. Vui lòng đảm bảo backend UserCourseController có @GetMapping("/{courseId}").`);
+        }
         const errorText = await response.text();
-        throw new Error(`Failed to fetch enrolled students (status: ${response.status}). Server response: ${errorText}`);
+        throw new Error(`Lấy danh sách học viên thất bại (trạng thái: ${response.status}). Phản hồi từ server: ${errorText}`);
       }
       const data: User[] = await response.json();
       setEnrolledStudents(data);
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định');
       setEnrolledStudents([]); // Reset on error
     } finally {
       setLoading(false);
@@ -48,12 +49,12 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
   const fetchAllUsers = useCallback(async () => {
     try {
         const response = await fetch(`${API_BASE_URL}/users`);
-        if(!response.ok) throw new Error("Failed to fetch all users.");
+        if(!response.ok) throw new Error("Lấy danh sách tất cả người dùng thất bại.");
         const data = await response.json();
         setAllUsers(data);
     } catch(err) {
         console.error(err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch the list of all users.');
+        setError(err instanceof Error ? err.message : 'Lấy danh sách tất cả người dùng thất bại.');
     }
   }, []);
 
@@ -72,18 +73,18 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
         });
         if(!response.ok) {
             const errorText = await response.text();
-            throw new Error(`Failed to enroll student. Server response: ${errorText}`);
+            throw new Error(`Ghi danh học viên thất bại. Phản hồi từ server: ${errorText}`);
         }
         fetchEnrolledStudents();
         fetchAllUsers(); // Re-fetch all users to update the unrolled list
         setIsModalOpen(false);
     } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to enroll student');
+        setError(err instanceof Error ? err.message : 'Ghi danh học viên thất bại');
     }
   }
 
   const handleRemoveStudent = async (userId: number) => {
-    if(window.confirm('Are you sure you want to remove this student from the course?')) {
+    if(window.confirm('Bạn có chắc chắn muốn xóa học viên này khỏi khóa học không?')) {
         setError(null);
         try {
             const response = await fetch(`${API_BASE_URL}/usercourse`, {
@@ -93,12 +94,12 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
             });
             if(!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`Failed to remove student. Server response: ${errorText}`);
+                throw new Error(`Xóa học viên thất bại. Phản hồi từ server: ${errorText}`);
             }
             fetchEnrolledStudents();
             fetchAllUsers(); // Re-fetch all users to update the unrolled list
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to remove student');
+            setError(err instanceof Error ? err.message : 'Xóa học viên thất bại');
         }
     }
   }
@@ -113,17 +114,17 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
       </div>
 
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Enrolled Students</h2>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Học viên đã ghi danh</h2>
         <button
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition"
         >
             <PlusIcon />
-            Enroll Student
+            Ghi danh học viên
         </button>
       </div>
 
-      {error && <div className="mb-4 text-center p-4 bg-red-100 dark:bg-red-900/20 rounded-lg"><p className="text-red-500">{error}</p></div>}
+      {error && <div className="mb-4 text-center p-4 bg-red-100 dark:bg-red-900/20 rounded-lg"><p className="text-red-500 font-semibold">{error}</p></div>}
       
       {loading ? <Spinner /> : (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
@@ -131,9 +132,9 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
             <table className="w-full text-left">
               <thead className="bg-gray-100 dark:bg-gray-700">
                   <tr>
-                      <th className="p-4 font-semibold">Name</th>
+                      <th className="p-4 font-semibold">Họ tên</th>
                       <th className="p-4 font-semibold">Email</th>
-                      <th className="p-4 font-semibold">Actions</th>
+                      <th className="p-4 font-semibold">Hành động</th>
                   </tr>
               </thead>
               <tbody>
@@ -151,12 +152,12 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
               </tbody>
             </table>
           ) : (
-            <p className="p-6 text-center text-gray-500 dark:text-gray-400">No students are enrolled in this course yet.</p>
+            <p className="p-6 text-center text-gray-500 dark:text-gray-400">Chưa có học viên nào được ghi danh vào khóa học này.</p>
           )}
         </div>
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Enroll Student">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Ghi danh học viên">
         <EnrollStudentForm
           users={unrolledUsers}
           onEnroll={handleEnrollStudent}

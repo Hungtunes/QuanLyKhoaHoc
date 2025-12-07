@@ -45,11 +45,11 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
         
         if (!usersResponse.ok) {
             const errorText = await usersResponse.text();
-            throw new Error(`Failed to fetch users data (status: ${usersResponse.status}). Server response: ${errorText}`);
+            throw new Error(`Lấy dữ liệu người dùng thất bại (trạng thái: ${usersResponse.status}). Phản hồi từ server: ${errorText}`);
         }
         if (!coursesResponse.ok) {
             const errorText = await coursesResponse.text();
-            throw new Error(`Failed to fetch courses data (status: ${coursesResponse.status}). Server response: ${errorText}`);
+            throw new Error(`Lấy dữ liệu khóa học thất bại (trạng thái: ${coursesResponse.status}). Phản hồi từ server: ${errorText}`);
         }
 
         const usersData: User[] = await usersResponse.json();
@@ -57,11 +57,11 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
         setUserCount(usersData.length);
         setCourseCount(coursesData.length);
       } catch (err) {
-        console.error('Failed to fetch dashboard data:', err);
+        console.error('Lấy dữ liệu dashboard thất bại:', err);
         if (err instanceof TypeError && err.message === 'Failed to fetch') {
-            setError(`Could not connect to the API server at ${API_BASE_URL}. Please make sure the server is running and accessible.`);
+            setError(`Không thể kết nối đến máy chủ API tại ${API_BASE_URL}. Vui lòng đảm bảo máy chủ đang chạy và có thể truy cập.`);
         } else {
-            setError(err instanceof Error ? err.message : 'An unknown error occurred');
+            setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định');
         }
       } finally {
         setLoading(false);
@@ -78,7 +78,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
     return (
         <div className="container mx-auto text-center p-8">
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative dark:bg-red-900/20 dark:border-red-500/50 dark:text-red-300" role="alert">
-                <strong className="font-bold">Error:</strong>
+                <strong className="font-bold">Lỗi:</strong>
                 <span className="block sm:inline ml-2">{error}</span>
             </div>
         </div>
@@ -87,37 +87,37 @@ const Dashboard: React.FC<DashboardProps> = ({ setView }) => {
 
   return (
     <div className="container mx-auto">
-        <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Welcome, Admin!</h2>
+        <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Chào mừng Quản trị viên!</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <StatCard 
                 icon={<UsersIcon className="w-7 h-7 text-white" />}
-                title="Total Users"
+                title="Tổng số người dùng"
                 value={userCount}
                 color="bg-blue-500"
             />
             <StatCard 
                 icon={<CoursesIcon className="w-7 h-7 text-white" />}
-                title="Total Courses"
+                title="Tổng số khóa học"
                 value={courseCount}
                 color="bg-green-500"
             />
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Quick Actions</h3>
+            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Tác vụ nhanh</h3>
             <div className="flex flex-col sm:flex-row gap-4">
                 <button 
                     onClick={() => setView('users')}
                     className="w-full sm:w-auto px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg shadow-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-75 transition-transform transform hover:scale-105"
                 >
-                    Manage Users
+                    Quản lý người dùng
                 </button>
                 <button 
                     onClick={() => setView('courses')}
                     className="w-full sm:w-auto px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 transition-transform transform hover:scale-105"
                 >
-                    Manage Courses
+                    Quản lý khóa học
                 </button>
             </div>
         </div>

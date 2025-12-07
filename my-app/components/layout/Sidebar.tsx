@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { View } from '../../types';
 import { DashboardIcon, UsersIcon, CoursesIcon } from '../ui/Icons';
@@ -37,25 +36,25 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, setView }) => {
       <div className="flex items-center justify-center mb-10">
         <CoursesIcon className="w-10 h-10 text-primary-500" />
         <h1 className="text-2xl font-bold ml-2 text-gray-800 dark:text-white">
-          CourseDash
+          Quản lý
         </h1>
       </div>
       <nav className="space-y-2">
         <NavLink
           icon={<DashboardIcon className="w-6 h-6" />}
-          label="Dashboard"
+          label="Bảng điều khiển"
           isActive={currentView === 'dashboard'}
           onClick={() => setView('dashboard')}
         />
         <NavLink
           icon={<UsersIcon className="w-6 h-6" />}
-          label="Users"
+          label="Người dùng"
           isActive={currentView === 'users'}
           onClick={() => setView('users')}
         />
         <NavLink
           icon={<CoursesIcon className="w-6 h-6" />}
-          label="Courses"
+          label="Khóa học"
           isActive={currentView === 'courses' || currentView === 'course-details'}
           onClick={() => setView('courses')}
         />

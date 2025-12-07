@@ -41,7 +41,8 @@ public class UserService {
     public User updateUser(String id, UserUpdateRequest request) {
         User user = getUser(id);
 
-        user.setPasswordHash(request.getPasswordHash());
+        if (request.getPasswordHash() != null && !request.getPasswordHash().isEmpty())
+            user.setPasswordHash(request.getPasswordHash());
         user.setHoTen(request.getHoTen());
         user.setSoDienThoai(request.getSoDienThoai());
         user.setNgaySinh(request.getNgaySinh());

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Course } from '../types';
 import { EditIcon, DeleteIcon } from './ui/Icons';
@@ -22,7 +21,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete, onVie
           onClick={onViewDetails}
           className="px-3 py-1.5 text-sm font-semibold text-white bg-primary-500 rounded-md hover:bg-primary-600 transition"
         >
-          View Students
+          Xem học viên
         </button>
         <div className="flex gap-2">
           <button onClick={onEdit} className="p-2 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition">
